@@ -7,10 +7,16 @@ const getFinancialAdvice = async (totalBudget, totalIncome, totalSpend) => {
     });
 
     const data = await res.json();
-    return data.advice || "No advice received.";
+    return {
+      advice: data.advice || "No advice received.",
+      prediction: data.prediction || "No prediction available.",
+    };
   } catch (error) {
     console.error("Frontend fetch error:", error);
-    return "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.";
+    return {
+      advice: "Sorry, couldn't fetch advice.",
+      prediction: "Sorry, couldn't fetch prediction.",
+    };
   }
 };
 

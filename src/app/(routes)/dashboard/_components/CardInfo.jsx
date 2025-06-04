@@ -1,12 +1,5 @@
 import formatNumber from "../../../../../utils";
 import getFinancialAdvice from "../../../../../utils/getFinancialAdvice";
-import {
-  PiggyBank,
-  ReceiptText,
-  Wallet,
-  Sparkles,
-  CircleDollarSign,
-} from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 function CardInfo({ budgetList, incomeList }) {
@@ -14,6 +7,7 @@ function CardInfo({ budgetList, incomeList }) {
   const [totalSpend, setTotalSpend] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
   const [financialAdvice, setFinancialAdvice] = useState("");
+  const [prediction, setPrediction] = useState("");
 
   useEffect(() => {
     if (budgetList.length > 0 || incomeList.length > 0) {
@@ -24,12 +18,13 @@ function CardInfo({ budgetList, incomeList }) {
   useEffect(() => {
     if (totalBudget > 0 || totalIncome > 0 || totalSpend > 0) {
       const fetchFinancialAdvice = async () => {
-        const advice = await getFinancialAdvice(
+        const { advice, prediction } = await getFinancialAdvice(
           totalBudget,
           totalIncome,
           totalSpend
         );
         setFinancialAdvice(advice);
+        setPrediction(prediction);
       };
 
       fetchFinancialAdvice();
@@ -60,21 +55,26 @@ function CardInfo({ budgetList, incomeList }) {
     <div>
       {budgetList?.length > 0 ? (
         <div>
-          <div className="p-7 border mt-4 -mb-1 rounded-2xl flex items-center justify-between">
-            <div className="">
-              <div className="flex mb-2 flex-row space-x-1 items-center ">
-                <h2 className="text-md ">Finan Smart AI</h2>
-                <Sparkles
-                  className="rounded-full text-white w-10 h-10 p-2
-    bg-gradient-to-r
-    from-pink-500
-    via-red-500
-    to-yellow-500
-    background-animate"
-                />
+          <div className="p-7 border mt-4 -mb-1 rounded-2xl flex flex-col space-y-4">
+            <div>
+              <div className="flex mb-2 flex-row space-x-1 items-center">
+                <h2 className="text-md font-bold text-2xl text-red-500">
+                  What AI Says
+                </h2>
               </div>
               <h2 className="font-light text-md">
                 {financialAdvice || "Loading financial advice..."}
+              </h2>
+            </div>
+
+            <div>
+              <div className="flex mb-2 flex-row space-x-1 items-center">
+                <h2 className="text-md font-bold text-2xl text-green-600">
+                  What AI Predicts
+                </h2>
+              </div>
+              <h2 className="font-light text-md">
+                {prediction || "Loading prediction..."}
               </h2>
             </div>
           </div>
@@ -84,35 +84,34 @@ function CardInfo({ budgetList, incomeList }) {
               <div>
                 <h2 className="text-sm">Total Budget</h2>
                 <h2 className="font-bold text-2xl">
-                  ${formatNumber(totalBudget)}
+                  <span className="text-red-300">Rs </span>
+                  {formatNumber(totalBudget)}
                 </h2>
               </div>
-              <PiggyBank className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
             </div>
             <div className="p-7 border rounded-2xl flex items-center justify-between">
               <div>
                 <h2 className="text-sm">Total Spend</h2>
                 <h2 className="font-bold text-2xl">
-                  ${formatNumber(totalSpend)}
+                  <span className="text-red-300">Rs </span>
+                  {formatNumber(totalSpend)}
                 </h2>
               </div>
-              <ReceiptText className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
             </div>
             <div className="p-7 border rounded-2xl flex items-center justify-between">
               <div>
                 <h2 className="text-sm">No. Of Budget</h2>
                 <h2 className="font-bold text-2xl">{budgetList?.length}</h2>
               </div>
-              <Wallet className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
             </div>
             <div className="p-7 border rounded-2xl flex items-center justify-between">
               <div>
                 <h2 className="text-sm">Sum of Income Streams</h2>
                 <h2 className="font-bold text-2xl">
-                  ${formatNumber(totalIncome)}
+                  <span className="text-red-300">Rs </span>
+                  {formatNumber(totalIncome)}
                 </h2>
               </div>
-              <CircleDollarSign className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
             </div>
           </div>
         </div>

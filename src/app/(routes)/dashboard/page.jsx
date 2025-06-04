@@ -53,7 +53,8 @@ function Dashboard() {
           ),
         })
         .from(Incomes)
-        .groupBy(Incomes.id); // Assuming you want to group by ID or any other relevant column
+        .where(eq(Incomes.createdBy, user?.primaryEmailAddress?.emailAddress)) // ✅ Filter incomes by current user
+        .groupBy(Incomes.id);
 
       setIncomeList(result);
     } catch (error) {

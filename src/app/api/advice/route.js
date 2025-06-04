@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Load API key from environment
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(req) {
@@ -20,24 +19,30 @@ export async function POST(req) {
 
     const userPrompt = `
       Based on the following financial data:
-      - Total Budget: ${totalBudget} USD
-      - Expenses: ${totalSpend} USD
-      - Incomes: ${totalIncome} USD
-      Provide detailed financial advice in 2 sentences to help the user manage their finances more effectively.
+      - Total Budget: Rs.${totalBudget}
+      - Expenses: Rs.${totalSpend}
+      - Incomes: Rs.${totalIncome}
+
+      Provide financial advice in sentences to help the user manage their finances.
+      Based on the provided financial data, estimate the user's potential monthly savings assuming current income and expense trends continue. Clearly label the result by starting with: 'Predicted Monthly Savings:'.
     `;
 
-    // Use the Gemini-pro model (text-only)
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     const result = await model.generateContent(userPrompt);
     const response = await result.response;
-    const advice = response.text();
+    const fullText = response.text();
 
-    return NextResponse.json({ advice });
+    const predictionMatch = fullText.match(/Predicted Savings:\s*([^\n\r]*)/i);
+    const prediction = predictionMatch
+      ? predictionMatch[1].trim()
+      : "Not available";
+    const advice = fullText.replace(/Predicted Savings:.*$/is, "").trim();
+
+    return NextResponse.json({ advice, prediction });
   } catch (error) {
     console.error("Gemini API error:", error);
     return NextResponse.json(
-      { advice: null, error: "Failed to fetch advice." },
+      { advice: null, prediction: null, error: "Failed to fetch data." },
       { status: 500 }
     );
   }
