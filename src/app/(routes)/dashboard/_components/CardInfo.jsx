@@ -1,13 +1,24 @@
 import formatNumber from "../../../../../utils";
 import getFinancialAdvice from "../../../../../utils/getFinancialAdvice";
+import getAlgorithmicInsights from "../../../../../utils/expenseInsightEngine";
+import getKMeansInsights from "../../../../../utils/getKMeansInsights";
 import React, { useEffect, useState } from "react";
 
 function CardInfo({ budgetList, incomeList }) {
   const [totalBudget, setTotalBudget] = useState(0);
   const [totalSpend, setTotalSpend] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
+
   const [financialAdvice, setFinancialAdvice] = useState("");
   const [prediction, setPrediction] = useState("");
+
+  const [algoAdvice, setAlgoAdvice] = useState("");
+  const [algoPrediction, setAlgoPrediction] = useState("");
+
+  // K-Means state
+  const [kMeansLabel, setKMeansLabel] = useState("");
+  const [kMeansAdvice, setKMeansAdvice] = useState("");
+  const [kMeansPrediction, setKMeansPrediction] = useState("");
 
   useEffect(() => {
     if (budgetList.length > 0 || incomeList.length > 0) {
@@ -17,7 +28,7 @@ function CardInfo({ budgetList, incomeList }) {
 
   useEffect(() => {
     if (totalBudget > 0 || totalIncome > 0 || totalSpend > 0) {
-      const fetchFinancialAdvice = async () => {
+      const fetchAIAdvice = async () => {
         const { advice, prediction } = await getFinancialAdvice(
           totalBudget,
           totalIncome,
@@ -27,23 +38,45 @@ function CardInfo({ budgetList, incomeList }) {
         setPrediction(prediction);
       };
 
-      fetchFinancialAdvice();
+      const fetchAlgoAdvice = () => {
+        const { advice, prediction } = getAlgorithmicInsights(
+          totalBudget,
+          totalIncome,
+          totalSpend
+        );
+        setAlgoAdvice(advice);
+        setAlgoPrediction(prediction);
+      };
+
+      const fetchKMeansAdvice = () => {
+        const { label, advice, prediction } = getKMeansInsights(
+          totalBudget,
+          totalIncome,
+          totalSpend
+        );
+        setKMeansLabel(label);
+        setKMeansAdvice(advice);
+        setKMeansPrediction(prediction);
+      };
+
+      fetchAIAdvice();
+      fetchAlgoAdvice();
+      fetchKMeansAdvice();
     }
   }, [totalBudget, totalIncome, totalSpend]);
 
   const CalculateCardInfo = () => {
-    console.log(budgetList);
     let totalBudget_ = 0;
     let totalSpend_ = 0;
     let totalIncome_ = 0;
 
     budgetList.forEach((element) => {
-      totalBudget_ = totalBudget_ + Number(element.amount);
-      totalSpend_ = totalSpend_ + element.totalSpend;
+      totalBudget_ += Number(element.amount);
+      totalSpend_ += element.totalSpend;
     });
 
     incomeList.forEach((element) => {
-      totalIncome_ = totalIncome_ + element.totalAmount;
+      totalIncome_ += element.totalAmount;
     });
 
     setTotalIncome(totalIncome_);
@@ -55,31 +88,81 @@ function CardInfo({ budgetList, incomeList }) {
     <div>
       {budgetList?.length > 0 ? (
         <div>
-          <div className="p-7 border mt-4 -mb-1 rounded-2xl flex flex-col space-y-4">
+          {/* AI Insights */}
+          <div className="p-7 border mt-4 mb-6 rounded-2xl space-y-4 shadow-md bg-white">
+            <h2 className="text-xl font-bold text-red-600 mb-2">AI Insights</h2>
+
             <div>
-              <div className="flex mb-2 flex-row space-x-1 items-center">
-                <h2 className="text-md font-bold text-2xl text-red-500">
-                  What AI Says
-                </h2>
-              </div>
-              <h2 className="font-light text-md">
+              <h3 className="text-lg font-semibold text-red-500">
+                What AI Says
+              </h3>
+              <p className="font-light text-md">
                 {financialAdvice || "Loading financial advice..."}
-              </h2>
+              </p>
             </div>
 
             <div>
-              <div className="flex mb-2 flex-row space-x-1 items-center">
-                <h2 className="text-md font-bold text-2xl text-green-600">
-                  What AI Predicts
-                </h2>
-              </div>
-              <h2 className="font-light text-md">
+              <h3 className="text-lg font-semibold text-green-600">
+                What AI Predicts
+              </h3>
+              <p className="font-light text-md">
                 {prediction || "Loading prediction..."}
-              </h2>
+              </p>
             </div>
           </div>
 
-          <div className="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Algorithmic Insights */}
+          <div className="p-7 border mb-10 rounded-2xl space-y-4 shadow-md bg-white">
+            <h2 className="text-xl font-bold text-blue-600 mb-2">
+              Algorithmic Insights
+            </h2>
+
+            <div>
+              <h3 className="text-lg font-semibold text-blue-500">
+                What Algorithm Says
+              </h3>
+              <p className="font-light text-md">{algoAdvice}</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-purple-500">
+                Predicted by Algorithm
+              </h3>
+              <p className="font-light text-md">{algoPrediction}</p>
+            </div>
+          </div>
+
+          {/* K-Means Insights */}
+          <div className="p-7 border mb-10 rounded-2xl space-y-4 shadow-md bg-white">
+            <h2
+              className={`text-xl font-bold mb-2 ${
+                kMeansLabel === "High Spender"
+                  ? "text-red-600"
+                  : kMeansLabel === "On Budget"
+                  ? "text-yellow-600"
+                  : "text-green-600"
+              }`}
+            >
+              K-Means Insights - {kMeansLabel || "Loading..."}
+            </h2>
+
+            <div>
+              <h3 className="text-lg font-semibold">What K-Means Says</h3>
+              <p className="font-light text-md">
+                {kMeansAdvice || "Loading advice..."}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold">Prediction</h3>
+              <p className="font-light text-md">
+                {kMeansPrediction || "Loading prediction..."}
+              </p>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <div className="p-7 border rounded-2xl flex items-center justify-between">
               <div>
                 <h2 className="text-sm">Total Budget</h2>

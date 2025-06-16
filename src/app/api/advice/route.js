@@ -23,8 +23,10 @@ export async function POST(req) {
       - Expenses: Rs.${totalSpend}
       - Incomes: Rs.${totalIncome}
 
-      Provide financial advice in sentences to help the user manage their finances.
-      Based on the provided financial data, estimate the user's potential monthly savings assuming current income and expense trends continue. Clearly label the result by starting with: 'Predicted Monthly Savings:'.
+      Provide clear and practical financial advice in simple language to help the user manage their finances better in brief.
+      Then, estimate the user's potential monthly savings assuming this income and expense pattern continues. 
+      Start this part with "Predicted Savings:" 
+      followed by a short explanation of how this prediction was made.
     `;
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });

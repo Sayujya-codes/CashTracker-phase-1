@@ -22,7 +22,7 @@ function BarChartDashboard({ budgetList }) {
         >
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip />
+          {/* <Tooltip /> */}
           <Legend />
           <Bar dataKey="totalSpend" stackId="a" fill="#000000" />
           <Bar dataKey="amount" stackId="a" fill="#808080" />
