@@ -31,8 +31,8 @@ function SideNav({ isMobileOpen, toggleMobile }) {
           {menuList.map((menu, index) => (
             <Link href={menu.path} key={index}>
               <h2
-                className={`text-gray-500 font-medium mb-2 p-4 cursor-pointer rounded-full
-                          hover:text-primary hover:bg-gray-100
+                className={`text-gray-500 font-medium mb-2 p-4 cursor-pointer rounded-xl
+                          hover:text-primary 
                           ${path === menu.path ? "text-primary bg-gray-100" : ""}`}
               >
                 {menu.name}
@@ -57,7 +57,7 @@ function SideNav({ isMobileOpen, toggleMobile }) {
                 className="ml-auto text-xl font-bold"
                 onClick={toggleMobile}
               >
-                ✕
+                ✕ 
               </button>
             </div>
 

@@ -2,6 +2,7 @@ import React from "react";
 import {
   Bar,
   BarChart,
+  Cell,
   Legend,
   ResponsiveContainer,
   Tooltip,
@@ -22,9 +23,16 @@ function BarChartDashboard({ budgetList }) {
         >
           <XAxis dataKey="name" />
           <YAxis />
-          {/* <Tooltip /> */}
+          <Tooltip />
           <Legend />
-          <Bar dataKey="totalSpend" stackId="a" fill="#000000" />
+          <Bar dataKey="totalSpend" stackId="a">
+            {budgetList.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={entry.totalSpend >= entry.amount * 0.9 ? "#FF0000" : "#000000"}
+              />
+            ))}
+          </Bar>
           <Bar dataKey="amount" stackId="a" fill="#808080" />
         </BarChart>
       </ResponsiveContainer>

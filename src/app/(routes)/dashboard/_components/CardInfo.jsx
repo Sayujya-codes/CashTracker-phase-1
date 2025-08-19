@@ -1,6 +1,5 @@
 import formatNumber from "../../../../../utils";
 import getFinancialAdvice from "../../../../../utils/getFinancialAdvice";
-import getAlgorithmicInsights from "../../../../../utils/expenseInsightEngine";
 import getKMeansInsights from "../../../../../utils/getKMeansInsights";
 import React, { useEffect, useState } from "react";
 
@@ -11,9 +10,6 @@ function CardInfo({ budgetList, incomeList }) {
 
   const [financialAdvice, setFinancialAdvice] = useState("");
   const [prediction, setPrediction] = useState("");
-
-  const [algoAdvice, setAlgoAdvice] = useState("");
-  const [algoPrediction, setAlgoPrediction] = useState("");
 
   // K-Means state
   const [kMeansLabel, setKMeansLabel] = useState("");
@@ -38,16 +34,6 @@ function CardInfo({ budgetList, incomeList }) {
         setPrediction(prediction);
       };
 
-      const fetchAlgoAdvice = () => {
-        const { advice, prediction } = getAlgorithmicInsights(
-          totalBudget,
-          totalIncome,
-          totalSpend
-        );
-        setAlgoAdvice(advice);
-        setAlgoPrediction(prediction);
-      };
-
       const fetchKMeansAdvice = () => {
         const { label, advice, prediction } = getKMeansInsights(
           totalBudget,
@@ -60,7 +46,6 @@ function CardInfo({ budgetList, incomeList }) {
       };
 
       fetchAIAdvice();
-      fetchAlgoAdvice();
       fetchKMeansAdvice();
     }
   }, [totalBudget, totalIncome, totalSpend]);
@@ -90,10 +75,10 @@ function CardInfo({ budgetList, incomeList }) {
         <div>
           {/* AI Insights */}
           <div className="p-7 border mt-4 mb-6 rounded-2xl space-y-4 shadow-md bg-white">
-            <h2 className="text-xl font-bold text-red-600 mb-2">AI Insights</h2>
+            <h2 className="text-xl font-bold text-black-600 mb-2">AI Insights</h2>
 
             <div>
-              <h3 className="text-lg font-semibold text-red-500">
+              <h3 className="text-lg font-semibold text-black-500">
                 What AI Says
               </h3>
               <p className="font-light text-md">
@@ -102,33 +87,12 @@ function CardInfo({ budgetList, incomeList }) {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-green-600">
+              <h3 className="text-lg font-semibold text-black-600">
                 What AI Predicts
               </h3>
               <p className="font-light text-md">
                 {prediction || "Loading prediction..."}
               </p>
-            </div>
-          </div>
-
-          {/* Algorithmic Insights */}
-          <div className="p-7 border mb-10 rounded-2xl space-y-4 shadow-md bg-white">
-            <h2 className="text-xl font-bold text-blue-600 mb-2">
-              Algorithmic Insights
-            </h2>
-
-            <div>
-              <h3 className="text-lg font-semibold text-blue-500">
-                What Algorithm Says
-              </h3>
-              <p className="font-light text-md">{algoAdvice}</p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-purple-500">
-                Predicted by Algorithm
-              </h3>
-              <p className="font-light text-md">{algoPrediction}</p>
             </div>
           </div>
 
@@ -167,7 +131,7 @@ function CardInfo({ budgetList, incomeList }) {
               <div>
                 <h2 className="text-sm">Total Budget</h2>
                 <h2 className="font-bold text-2xl">
-                  <span className="text-red-300">Rs </span>
+                  <span className="text-gray-400">Rs </span>
                   {formatNumber(totalBudget)}
                 </h2>
               </div>
@@ -176,7 +140,7 @@ function CardInfo({ budgetList, incomeList }) {
               <div>
                 <h2 className="text-sm">Total Spend</h2>
                 <h2 className="font-bold text-2xl">
-                  <span className="text-red-300">Rs </span>
+                  <span className="text-gray-400">Rs </span>
                   {formatNumber(totalSpend)}
                 </h2>
               </div>
@@ -191,7 +155,7 @@ function CardInfo({ budgetList, incomeList }) {
               <div>
                 <h2 className="text-sm">Sum of Income Streams</h2>
                 <h2 className="font-bold text-2xl">
-                  <span className="text-red-300">Rs </span>
+                  <span className="text-gray-400">Rs </span>
                   {formatNumber(totalIncome)}
                 </h2>
               </div>
