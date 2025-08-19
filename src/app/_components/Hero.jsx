@@ -1,7 +1,5 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -10,12 +8,12 @@ function Hero() {
     <section className="bg-gray-50 dark:bg-black/90 py-20">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center text-center">
         <Badge variant="outline" className="mb-4">
-          💡 AI-Driven Finance Assistant
+          AI-Driven Finance Assistant
         </Badge>
 
         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
           Manage Your Money Smarter With <br />
-          <span className="text-primary">CashTracker</span>
+          <span className="text-red-600">CashTracker</span>
         </h1>
 
         <p className="text-lg text-muted-foreground max-w-2xl mb-8">
@@ -25,7 +23,9 @@ function Hero() {
 
         <div className="flex gap-4 mb-10 flex-wrap justify-center">
           <Link href="/dashboard">
-            <Button size="lg">Get Started</Button>
+            <Button size="lg" className="bg-red-700 hover:bg-red-500">
+              Go To Dashboard
+            </Button>
           </Link>
           <Link href="/demo">
             <Button size="lg" variant="outline">
