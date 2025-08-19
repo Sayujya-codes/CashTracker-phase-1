@@ -57,7 +57,7 @@ function AddExpense({ budgetId, user, refreshData }) {
         />
       </div>
       <Button
-        disabled={!(name && amount) || loading}
+        disabled={!(name && amount && Number(amount) > 0 && Number(amount) <= 100000) || loading}
         onClick={() => addNewExpense()}
         className="mt-3 w-full rounded-full"
       >

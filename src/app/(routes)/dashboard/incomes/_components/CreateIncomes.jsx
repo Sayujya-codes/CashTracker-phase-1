@@ -103,7 +103,7 @@ function CreateIncomes({ refreshData }) {
           <DialogFooter className="sm:justify-start">
             <DialogClose asChild>
               <Button
-                disabled={!(name && amount)}
+                disabled={!(name && amount && Number(amount) > 0 && Number(amount) <= 10000000)}
                 onClick={() => onCreateIncomes()}
                 className="mt-5 w-full rounded-full"
               >
