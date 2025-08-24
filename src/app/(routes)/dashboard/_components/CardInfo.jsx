@@ -74,7 +74,7 @@ function CardInfo({ budgetList, incomeList }) {
       {budgetList?.length > 0 ? (
         <div>
           {/* AI Insights */}
-          <div className="p-7 border mt-4 mb-6 rounded-2xl space-y-4 shadow-md bg-white">
+          <div className="p-7 border mt-4 mb-6  space-y-4 shadow-md bg-white">
             <h2 className="text-xl font-bold text-black-600 mb-2">AI Insights</h2>
 
             <div>
@@ -97,7 +97,7 @@ function CardInfo({ budgetList, incomeList }) {
           </div>
 
           {/* K-Means Insights */}
-          <div className="p-7 border mb-10 rounded-2xl space-y-4 shadow-md bg-white">
+          <div className="p-7 border mb-10 space-y-4 shadow-md bg-white">
             <h2
               className={`text-xl font-bold mb-2 ${
                 kMeansLabel === "High Spender"
@@ -127,7 +127,7 @@ function CardInfo({ budgetList, incomeList }) {
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div className="p-7 border rounded-2xl flex items-center justify-between">
+            <div className="p-7 border flex items-center justify-between">
               <div>
                 <h2 className="text-sm">Total Budget</h2>
                 <h2 className="font-bold text-2xl">
@@ -136,7 +136,7 @@ function CardInfo({ budgetList, incomeList }) {
                 </h2>
               </div>
             </div>
-            <div className="p-7 border rounded-2xl flex items-center justify-between">
+            <div className="p-7 border flex items-center justify-between">
               <div>
                 <h2 className="text-sm">Total Spend</h2>
                 <h2 className="font-bold text-2xl">
@@ -145,13 +145,13 @@ function CardInfo({ budgetList, incomeList }) {
                 </h2>
               </div>
             </div>
-            <div className="p-7 border rounded-2xl flex items-center justify-between">
+            <div className="p-7 border flex items-center justify-between">
               <div>
                 <h2 className="text-sm">No. Of Budget</h2>
                 <h2 className="font-bold text-2xl">{budgetList?.length}</h2>
               </div>
             </div>
-            <div className="p-7 border rounded-2xl flex items-center justify-between">
+            <div className="p-7 border flex items-center justify-between">
               <div>
                 <h2 className="text-sm">Sum of Income Streams</h2>
                 <h2 className="font-bold text-2xl">
@@ -166,7 +166,7 @@ function CardInfo({ budgetList, incomeList }) {
         <div className="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {[1, 2, 3].map((item, index) => (
             <div
-              className="h-[110px] w-full bg-slate-200 animate-pulse rounded-lg"
+              className="h-[110px] w-full bg-slate-200 animate-pulse"
               key={index}
             ></div>
           ))}

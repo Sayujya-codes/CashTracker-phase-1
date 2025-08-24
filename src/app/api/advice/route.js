@@ -8,7 +8,7 @@ export async function POST(req) {
 
   try {
     const { totalBudget, totalIncome, totalSpend } = await req.json();
-    console.log({ totalBudget, totalIncome, totalSpend });
+    // console.log({ totalBudget, totalIncome, totalSpend });
 
     if (!totalBudget || !totalIncome || !totalSpend) {
       return NextResponse.json(

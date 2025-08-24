@@ -31,7 +31,7 @@ function SideNav({ isMobileOpen, toggleMobile }) {
           {menuList.map((menu, index) => (
             <Link href={menu.path} key={index}>
               <h2
-                className={`text-gray-500 font-medium mb-2 p-4 cursor-pointer rounded-xl
+                className={`text-gray-500 font-medium mb-2 p-4 cursor-pointer
                           hover:text-primary 
                           ${path === menu.path ? "text-primary bg-gray-100" : ""}`}
               >
@@ -65,7 +65,7 @@ function SideNav({ isMobileOpen, toggleMobile }) {
               {menuList.map((menu, index) => (
                 <Link href={menu.path} key={index} onClick={toggleMobile}>
                   <h2
-                    className={`text-gray-500 font-medium mb-2 p-4 cursor-pointer rounded-full
+                    className={`text-gray-500 font-medium mb-2 p-4 cursor-pointer
                               hover:text-primary hover:bg-gray-100
                               ${path === menu.path ? "text-primary bg-gray-100" : ""}`}
                   >
