@@ -29,7 +29,10 @@ function BarChartDashboard({ budgetList }) {
             {budgetList.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={entry.totalSpend >= entry.amount * 0.9 ? "#FF0000" : "#000000"}
+                fill={
+                  // check if over 90% of amount spent
+                  entry.totalSpend >= entry.amount * 0.9 ? "#FF0000" : "#000000"
+                }
               />
             ))}
           </Bar>

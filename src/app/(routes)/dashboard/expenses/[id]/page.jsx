@@ -1,7 +1,5 @@
 "use client";
-// import { db } from "@/utils/dbConfig";
 import { db } from "../../../../../../utils/dbconfig";
-// import { Budgets, Expenses } from "@/utils/schema";
 import { Budgets, Expenses } from "../../../../../../utils/schema";
 import { useUser } from "@clerk/nextjs";
 import { desc, eq, getTableColumns, sql } from "drizzle-orm";
@@ -10,7 +8,7 @@ import BudgetItem from "../../budgets/_components/BudgetItem";
 import AddExpense from "../_components/AddExpense";
 import ExpenseListTable from "../_components/ExpenseListTable";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Pen, PenBox, Trash } from "lucide-react";
+import { ArrowLeft, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,9 +26,10 @@ import EditBudget from "../_components/EditBudget";
 
 function ExpensesScreen({ params }) {
   const { user } = useUser();
-  const [budgetInfo, setbudgetInfo] = useState();
+  const [budgetInfo, setBudgetInfo] = useState();
   const [expensesList, setExpensesList] = useState([]);
   const route = useRouter();
+
   useEffect(() => {
     user && getBudgetInfo();
   }, [user]);
@@ -51,7 +50,7 @@ function ExpensesScreen({ params }) {
       .where(eq(Budgets.id, params.id))
       .groupBy(Budgets.id);
 
-    setbudgetInfo(result[0]);
+    setBudgetInfo(result[0]);
     getExpensesList();
   };
 
@@ -65,26 +64,25 @@ function ExpensesScreen({ params }) {
       .where(eq(Expenses.budgetId, params.id))
       .orderBy(desc(Expenses.id));
     setExpensesList(result);
-    // console.log(result);
   };
 
   /**
-   * Used to Delete budget
+   * Delete Budget (and all related expenses)
    */
   const deleteBudget = async () => {
-    const deleteExpenseResult = await db
-      .delete(Expenses)
-      .where(eq(Expenses.budgetId, params.id))
-      .returning();
+    try {
+      // Delete all related expenses first
+      await db.delete(Expenses).where(eq(Expenses.budgetId, params.id));
 
-    if (deleteExpenseResult) {
-      const result = await db
-        .delete(Budgets)
-        .where(eq(Budgets.id, params.id))
-        .returning();
+      // Delete the budget itself
+      await db.delete(Budgets).where(eq(Budgets.id, params.id));
+
+      toast("Budget Deleted!");
+      route.replace("/dashboard/budgets");
+    } catch (error) {
+      console.error("Error deleting budget:", error);
+      toast("Failed to delete budget");
     }
-    toast("Budget Deleted !");
-    route.replace("/dashboard/budgets");
   };
 
   return (

@@ -16,11 +16,11 @@ function Header() {
         <UserButton />
       ) : (
         <div className="flex gap-3  items-center">
-          <Link href={"/dashboard"}>
+          {/* <Link href={"/dashboard"}>
             <Button variant="outline" className="rounded-full">
               Dashboard
             </Button>
-          </Link>
+          </Link> */}
           <Link href={"/sign-in"}>
             <Button className="rounded-full">Get Started</Button>
           </Link>

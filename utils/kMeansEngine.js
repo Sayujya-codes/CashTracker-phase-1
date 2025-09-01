@@ -1,13 +1,30 @@
-// Simple K-Means clustering for 1D data (expense amounts)
-
+// K-Means clustering for 1D data with K-Means++ initialization
 function kMeans(expenses, k = 3, maxIterations = 100) {
   if (!expenses.length) return [];
 
-  // Initialize centroids: pick k random points from expenses
-  let centroids = expenses
-    .slice()
-    .sort(() => 0.5 - Math.random())
-    .slice(0, k);
+  // --- K-Means++ Initialization ---
+  let centroids = [];
+  // Pick first centroid randomly
+  centroids.push(expenses[Math.floor(Math.random() * expenses.length)]);
+
+  while (centroids.length < k) {
+    // Calculate distance of each point to nearest existing centroid
+    let distances = expenses.map((exp) => {
+      return Math.min(...centroids.map((c) => Math.abs(exp - c)));
+    });
+
+    // Weighted random selection based on distance
+    let sum = distances.reduce((a, b) => a + b, 0);
+    let r = Math.random() * sum;
+    let cumulative = 0;
+    for (let i = 0; i < expenses.length; i++) {
+      cumulative += distances[i];
+      if (cumulative >= r) {
+        centroids.push(expenses[i]);
+        break;
+      }
+    }
+  }
 
   let clusters = new Array(k).fill().map(() => []);
 
@@ -22,7 +39,7 @@ function kMeans(expenses, k = 3, maxIterations = 100) {
 
     // Update centroids
     let newCentroids = clusters.map((cluster) => {
-      if (cluster.length === 0) return 0;
+      if (cluster.length === 0) return 0; // Handle empty cluster
       return cluster.reduce((a, b) => a + b, 0) / cluster.length;
     });
 
@@ -35,7 +52,7 @@ function kMeans(expenses, k = 3, maxIterations = 100) {
     if (converged) break;
   }
 
-  // After clustering, assign each expense to cluster label (0,1,2)
+  // Assign each expense to cluster
   const labels = expenses.map((expense) => {
     let distances = centroids.map((c) => Math.abs(expense - c));
     return distances.indexOf(Math.min(...distances));

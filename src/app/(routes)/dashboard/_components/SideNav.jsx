@@ -10,7 +10,7 @@ function SideNav({ isMobileOpen, toggleMobile }) {
     { id: 2, name: "Incomes", path: "/dashboard/incomes" },
     { id: 3, name: "Budgets", path: "/dashboard/budgets" },
     { id: 4, name: "Expenses", path: "/dashboard/expenses" },
-    { id: 5, name: "Upgrade", path: "/dashboard/upgrade" },
+    { id: 5, name: "Overview", path: "/dashboard/upgrade" },
   ];
 
   const path = usePathname();
@@ -33,7 +33,9 @@ function SideNav({ isMobileOpen, toggleMobile }) {
               <h2
                 className={`text-gray-500 font-medium mb-2 p-4 cursor-pointer
                           hover:text-primary 
-                          ${path === menu.path ? "text-primary bg-gray-100" : ""}`}
+                          ${
+                            path === menu.path ? "text-primary bg-gray-100" : ""
+                          }`}
               >
                 {menu.name}
               </h2>
@@ -57,7 +59,7 @@ function SideNav({ isMobileOpen, toggleMobile }) {
                 className="ml-auto text-xl font-bold"
                 onClick={toggleMobile}
               >
-                ✕ 
+                ✕
               </button>
             </div>
 
@@ -67,7 +69,11 @@ function SideNav({ isMobileOpen, toggleMobile }) {
                   <h2
                     className={`text-gray-500 font-medium mb-2 p-4 cursor-pointer
                               hover:text-primary hover:bg-gray-100
-                              ${path === menu.path ? "text-primary bg-gray-100" : ""}`}
+                              ${
+                                path === menu.path
+                                  ? "text-primary bg-gray-100"
+                                  : ""
+                              }`}
                   >
                     {menu.name}
                   </h2>

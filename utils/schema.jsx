@@ -8,7 +8,7 @@ import {
 
 export const Budgets = pgTable("budgets", {
   id: serial("id").primaryKey(),
-  name: varchar("name").notNull(),
+  name: varchar("name").notNull().unique(),
   amount: varchar("amount").notNull(),
   icon: varchar("icon"),
   createdBy: varchar("createdBy").notNull(),

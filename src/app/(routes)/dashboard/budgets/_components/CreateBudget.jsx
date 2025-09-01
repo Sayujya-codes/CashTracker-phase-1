@@ -33,6 +33,7 @@ function CreateBudget({ refreshData }) {
    * Used to Create New Budget
    */
   const onCreateBudget = async () => {
+  try {
     const result = await db
       .insert(Budgets)
       .values({
@@ -47,7 +48,16 @@ function CreateBudget({ refreshData }) {
       refreshData();
       toast("New Budget Created!");
     }
-  };
+  } catch (error) {
+  // Check for PostgreSQL unique constraint violation
+  if (error.code === "23505" || error?.message?.includes("unique_budget_per_user")) {
+    toast.error("Budget name already exists! Please choose another.");
+  } else {
+    console.error("Insert budget error:", error);
+    toast.error("Budget already exists.");
+  }
+}
+};
   return (
     <div>
       <Dialog>
@@ -85,7 +95,7 @@ function CreateBudget({ refreshData }) {
                 <div className="mt-2">
                   <h2 className="text-black font-medium my-1">Budget Name</h2>
                   <Input
-                    placeholder="e.g. Home Decor"
+                    placeholder="e.g. Food"
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>

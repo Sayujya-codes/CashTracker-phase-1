@@ -86,7 +86,7 @@ function EditBudget({ budgetInfo, refreshData }) {
                 <div className="mt-2">
                   <h2 className="text-black font-medium my-1">Budget Name</h2>
                   <Input
-                    placeholder="e.g. Home Decor"
+                    placeholder="e.g. Food"
                     defaultValue={budgetInfo?.name}
                     onChange={(e) => setName(e.target.value)}
                   />

@@ -44,7 +44,7 @@ test('testing flow', async({page})=>{
 
 
     await page.getByText('+Create New Budget').click()
-    await page.getByRole('textbox', { name: 'e.g. Home Decor' }).fill("Playwright Test")
+    await page.getByRole('textbox', { name: 'e.g. Food' }).fill("Playwright Test")
     await page.getByPlaceholder('e.g. Rs.5000').fill('5000')
     await page.locator('div').filter({ hasText: /^Create Budget$/ }).click()
     
@@ -59,7 +59,7 @@ test('testing flow', async({page})=>{
 
     // ---------------- adding new expense 
 
-    await page.getByRole('textbox', { name: 'e.g. Bedroom Decor' }).fill("Playwright test expect")
+    await page.getByRole('textbox', { name: 'e.g. Expense Name' }).fill("Playwright test expect")
     await page.getByRole('textbox', { name: 'e.g. 1000' }).fill("1000")
     await page.getByRole('button', { name: 'Add New Expense' }).click()
 

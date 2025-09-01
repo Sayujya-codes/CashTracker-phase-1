@@ -1,9 +1,7 @@
 import kMeans from "./kMeansEngine";
 
-// Define labels based on centroid order (low to high spend)
 const labels = ["Good Saver", "On Budget", "High Spender"];
 
-// Predefined advice messages for each cluster
 const adviceMap = {
   "High Spender":
     "You tend to spend more than your budget. Consider cutting down on unnecessary expenses.",
@@ -20,13 +18,7 @@ const predictionMap = {
 };
 
 function getKMeansInsights(totalBudget, totalIncome, totalSpend) {
-  // For clustering, we can use totalSpend as 1D data.
-  // If you want, you can add more features as an array per user.
-
-  // Run k-means on a sample set of expenses for demonstration.
-  // In real scenario, you'd run k-means on historical expense data of multiple users.
-  // Here we mock a sample expense array including current totalSpend for clustering:
-
+  // Create sample expense dataset including variations of totalSpend
   const sampleExpenses = [
     totalSpend,
     totalSpend * 0.5,
@@ -36,21 +28,20 @@ function getKMeansInsights(totalBudget, totalIncome, totalSpend) {
     totalSpend * 0.3,
   ];
 
-  // Run kMeans with k=3 clusters
-  const { centroids, labels: assignedLabels } = kMeans(sampleExpenses, 3);
+  // Run k-means with k=3
+  const { centroids } = kMeans(sampleExpenses, 3);
 
-  // Sort centroids ascending to assign consistent labels
+  // Sort centroids and map clusters to labels
   const sortedCentroids = centroids
     .map((val, idx) => ({ val, idx }))
     .sort((a, b) => a.val - b.val);
 
-  // Create mapping from cluster index to label (Good Saver, On Budget, High Spender)
   const clusterLabelMap = {};
   clusterLabelMap[sortedCentroids[0].idx] = "Good Saver";
   clusterLabelMap[sortedCentroids[1].idx] = "On Budget";
   clusterLabelMap[sortedCentroids[2].idx] = "High Spender";
 
-  // Find cluster index for current totalSpend
+  // Find cluster for current totalSpend
   const distancesToCentroids = centroids.map((c) => Math.abs(totalSpend - c));
   const clusterIndex = distancesToCentroids.indexOf(
     Math.min(...distancesToCentroids)

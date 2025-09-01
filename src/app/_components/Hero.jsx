@@ -27,11 +27,11 @@ function Hero() {
               Go To Dashboard
             </Button>
           </Link>
-          <Link href="/demo">
+          {/* <Link href="/demo">
             <Button size="lg" variant="outline">
               Try Demo
             </Button>
-          </Link>
+          </Link> */}
         </div>
 
         {/* Scroll animation with banner image */}

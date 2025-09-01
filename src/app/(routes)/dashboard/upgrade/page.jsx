@@ -1,39 +1,72 @@
-import React from "react";
+"use client";
+import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+// import { db } from "../../../../../utils/dbconfig";
+import { db } from "../../../../../utils/dbconfig";
+import { Budgets, Expenses } from "../../../../../utils/schema";
+import { eq, desc, getTableColumns } from "drizzle-orm";
+// import ExpenseListTable from "../_components/ExpenseListTable";
+import ExpenseListTable from "../expenses/_components/ExpenseListTable";
 
 function Upgrade() {
+  const { user } = useUser();
+  const [budgetsWithExpenses, setBudgetsWithExpenses] = useState([]);
+
+  useEffect(() => {
+    if (user) fetchBudgetsWithExpenses();
+  }, [user]);
+
+  const fetchBudgetsWithExpenses = async () => {
+    const budgets = await db
+      .select(getTableColumns(Budgets))
+      .from(Budgets)
+      .where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress))
+      .orderBy(desc(Budgets.id));
+
+    const budgetsData = await Promise.all(
+      budgets.map(async (budget) => {
+        const expenses = await db
+          .select()
+          .from(Expenses)
+          .where(eq(Expenses.budgetId, budget.id))
+          .orderBy(desc(Expenses.id));
+        return { ...budget, expenses };
+      })
+    );
+
+    setBudgetsWithExpenses(budgetsData);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-6 py-12">
-      <h1 className="text-3xl font-bold text-gray-900 mb-10">Choose Your Plan</h1>
+    <div className="p-10">
+      <h2 className="text-2xl font-bold mb-6">Budget & Expenses Overview</h2>
 
-      <div className="grid gap-6 md:grid-cols-2 w-full max-w-3xl">
-        {/* Pro Plan */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 text-center shadow hover:shadow-md transition">
-          <h2 className="text-xl font-semibold mb-2">Pro Plan</h2>
-          <p className="text-2xl font-bold text-red-600 mb-4">Rs. 3000 / month</p>
-          <ul className="text-gray-600 space-y-2 mb-6">
-            <li>- 20 users</li>
-            <li>- 5GB storage</li>
-            <li>- Email support</li>
-          </ul>
-          <button className="w-full py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-500">
-            Get Started
-          </button>
-        </div>
+      {budgetsWithExpenses.length === 0 ? (
+        <p className="text-gray-500">No budgets or expenses found.</p>
+      ) : (
+        budgetsWithExpenses.map((budget) => (
+          <div
+            key={budget.id}
+            className="mb-8 border rounded-xl p-5 shadow-sm bg-white"
+          >
+            {/* Budget Header */}
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">
+                {budget.icon} {budget.name}
+              </h2>
+              <p className="text-lg font-bold text-primary">
+                Rs.{budget.amount}
+              </p>
+            </div>
 
-        {/* Starter Plan */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 text-center shadow hover:shadow-md transition">
-          <h2 className="text-xl font-semibold mb-2">Starter Plan</h2>
-          <p className="text-2xl font-bold text-gray-800 mb-4">Rs. 2000 / month</p>
-          <ul className="text-gray-600 space-y-2 mb-6">
-            <li>- 10 users</li>
-            <li>- 2GB storage</li>
-            <li>- Email support</li>
-          </ul>
-          <button className="w-full py-2 border border-red-700 text-gray-800 rounded-lg font-medium hover:bg-gray-100">
-            Get Started
-          </button>
-        </div>
-      </div>
+            {/* Expense List */}
+            <ExpenseListTable
+              expensesList={budget.expenses}
+              refreshData={fetchBudgetsWithExpenses}
+            />
+          </div>
+        ))
+      )}
     </div>
   );
 }
